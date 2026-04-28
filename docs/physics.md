@@ -1,31 +1,30 @@
-# 🌊 物理海洋实验室：动力的旋律
+# 🌀 物理海洋：动力学交互实验室
 
-> **交互指引**：海洋的运动并非杂乱无章。请点击下方的选项卡，对比不同尺度下的海水动力特征。
+> **实验室指引**：在左侧调节参数，实时观察物理环境对海浪形态的影响。
 
 #### [physics-tabs:start]
 
-##### **🌀 波动实验室 (Waves)**
-**核心概念**：波浪是能量的传递，而非水分子的长距离迁移。
+##### **🌊 实时波浪仿真**
+通过调整**振幅**和**频率**，观察水质点的运动包络线。
 
-* **深海波 (Deep Water Waves)**：当水深 > 1/2 波长时，波速仅取决于波长。
-* **浅海波 (Shallow Water Waves)**：当水深 < 1/20 波长时，波速仅由水深决定。
-* **交互思考**：为什么海啸在深海时难以察觉，靠近岸边却变成巨浪？
-    * *提示：能量守恒导致波高随水深变浅而激增。*
+<div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid #00d4ff;">
+  <canvas id="waveChart" width="400" height="180"></canvas>
+  <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center; font-size: 0.9em;">
+    <label>振幅 (Amplitude): <input type="range" id="amplitude" min="1" max="10" value="5"></label>
+    <label>频率 (Frequency): <input type="range" id="frequency" min="0.1" max="2" step="0.1" value="1"></label>
+  </div>
+</div>
 
+**原理提示**：
+- **振幅 ($A$)**：决定波浪的能量。
+- **频率 ($f$)**：决定单位时间内波峰通过的数量。
 
-
-##### **🌍 环流大厅 (Circulation)**
-**核心概念**：全球大洋的“输送带”。
-
-* **风驱动环流**：由信风和西风驱动的表层环流（如黑潮）。
-* **温盐环流 (Thermohaline)**：由温度和盐度产生的密度差异驱动的深层泵。
-* **西边界强化**：受科氏力影响，大洋西侧的洋流（如墨西哥湾流）总是更强、更窄、更深。
-
-##### **🌪️ 极化现象 (Coriolis Effect)**
-**核心概念**：旋转地球带来的“物理错觉”。
-
-* **北半球**：物体运动向右偏转。
-* **南半球**：物体运动向左偏转。
-* **应用**：它是气旋形成和埃克曼抽吸（Ekman Suction）的根本原因。
+##### **🌍 环流探索**
+- [**风驱洋流**：表层系统的动力源](#/physics?id=wind-driven)
+- [**温盐环流**：深海的热量输送带](#/physics?id=thermohaline)
 
 #### [physics-tabs:end]
+
+---
+### 🔗 实验室导航
+| [🧪 前往生化中心](#/biochem) | [🌋 前往地质考察](#/geology) | [🏠 返回主门户](/) |
