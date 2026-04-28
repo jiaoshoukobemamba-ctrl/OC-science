@@ -5,142 +5,91 @@
   <title>海洋科学数字实验室 | Ocean Science Digital Lab</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
-  
   <style>
-    body, html {
-      margin: 0; padding: 0; width: 100%; height: 100%;
-      font-family: 'Roboto', sans-serif;
-      background: #000c19; /* 深海底色 */
-      color: white;
-      overflow-x: hidden;
-    }
-
-    /* 动态光晕背景 */
-    .bg-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at 50% 50%, #02203c 0%, #000c19 100%);
-      z-index: 1;
-    }
-
-    .glow {
-      position: absolute;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-      border-radius: 50%;
-      top: -100px; right: -100px;
-      z-index: 2;
-      animation: float 10s infinite alternate;
-    }
-
-    @keyframes float {
-      from { transform: translate(0, 0); }
-      to { transform: translate(-50px, 50px); }
-    }
-
-    .cover-container {
-      position: relative;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh; z-index: 10; padding: 40px 20px;
-      box-sizing: border-box;
-    }
-
-    .cover-header { margin-bottom: 60px; }
-    .cover-header h1 {
-      font-size: clamp(2em, 8vw, 3.5em);
-      margin: 0; color: #00d4ff;
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-    }
-    .cover-header small { display: block; font-size: 0.9em; opacity: 0.7; letter-spacing: 2px; margin-top: 10px; }
-    .cover-header p {
-      font-size: 1.1em; max-width: 700px; margin: 25px auto;
-      font-weight: 300; line-height: 1.8; opacity: 0.9;
-    }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px; width: 100%; max-width: 1100px;
-    }
-
-    .card-link { text-decoration: none; color: inherit; display: block; }
+    body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Roboto', sans-serif; background: #000c19; color: white; overflow-x: hidden; }
     
-    .grid-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px; padding: 35px 25px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      height: 100%; box-sizing: border-box;
+    /* 顶部磨砂导航栏 */
+    .nav-bar {
+      position: fixed; top: 0; width: 100%; height: 60px;
+      background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 50px; box-sizing: border-box; z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
+    .nav-links a { color: white; text-decoration: none; margin-left: 30px; font-size: 0.9em; opacity: 0.8; transition: 0.3s; }
+    .nav-links a:hover { color: #00d4ff; opacity: 1; }
 
-    .grid-card:hover {
-      transform: translateY(-12px);
-      border-color: #00d4ff;
-      background: rgba(0, 212, 255, 0.08);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
+    /* 动态背景 */
+    .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: linear-gradient(to bottom, #02203c, #000c19); overflow: hidden; }
+    .wave { position: absolute; bottom: 0; left: 0; width: 200%; height: 100px; background: url('https://s1.ax1x.com/2022/06/08/XfM9m9.png'); background-size: 50% 100px; opacity: 0.1; animation: wave-move 20s linear infinite; }
+    .wave2 { bottom: 10px; opacity: 0.05; animation: wave-move 15s linear infinite reverse; }
+    @keyframes wave-move { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    .grid-card .icon { font-size: 45px; margin-bottom: 20px; }
-    .grid-card h3 { margin: 10px 0; font-size: 1.4em; font-weight: 500; transition: 0.3s; }
-    .grid-card:hover h3 { color: #00d4ff; }
-    .grid-card p { font-size: 0.95em; opacity: 0.7; line-height: 1.6; margin: 0; }
+    .cover-container { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; z-index: 10; padding: 100px 20px 40px; box-sizing: border-box; }
+    .cover-header { margin-bottom: 50px; }
+    .cover-header h1 { font-size: clamp(2.5em, 6vw, 4em); margin: 0; color: #00d4ff; text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+    .cover-header p { font-size: 1.2em; max-width: 800px; margin: 20px auto; font-weight: 300; opacity: 0.8; line-height: 1.6; }
 
-    .cover-footer { margin-top: 60px; opacity: 0.5; font-size: 0.85em; }
-    .cover-footer a { color: white; text-decoration: none; margin: 0 10px; border-bottom: 1px solid transparent; }
-    .cover-footer a:hover { border-color: #00d4ff; opacity: 1; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; max-width: 1200px; }
+    .card-link { text-decoration: none; color: inherit; }
+    .grid-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px 30px; transition: 0.4s; backdrop-filter: blur(5px); position: relative; }
+    .grid-card:hover { transform: translateY(-10px); border-color: #00d4ff; background: rgba(0, 212, 255, 0.05); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+    .icon { font-size: 50px; margin-bottom: 20px; display: block; }
+    
+    /* 实时模拟小挂件 */
+    .status-tag { position: absolute; top: 15px; right: 20px; font-size: 10px; color: #00d4ff; border: 1px solid #00d4ff; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+    .cover-footer { margin-top: 80px; opacity: 0.4; font-size: 0.8em; }
   </style>
 </head>
 <body>
-  <div class="bg-overlay"></div>
-  <div class="glow"></div>
+  <nav class="nav-bar">
+    <div style="font-weight: 700; letter-spacing: 1px;">OSDL</div>
+    <div class="nav-links">
+      <a href="docs/#/README">快速开始</a>
+      <a href="https://github.com/">GitHub</a>
+    </div>
+  </nav>
+
+  <div class="bg-container">
+    <div class="wave"></div>
+    <div class="wave wave2"></div>
+  </div>
 
   <div class="cover-container">
     <div class="cover-header">
       <h1>海洋科学数字实验室</h1>
-      <small>OCEAN SCIENCE DIGITAL LAB</small>
-      <p>探索深海律动，记录科研点滴。这是一个集成的数字化知识库，涵盖物理海洋、生化循环及地质演化研究。</p>
+      <p>面向深海动力学、生物地球化学与构造演化的集成化数字平台</p>
     </div>
 
     <div class="grid-container">
       <a href="docs/#/physics" class="card-link">
         <div class="grid-card">
-          <div class="icon">🌀</div>
+          <span class="status-tag">Simulation Active</span>
+          <span class="icon">🌀</span>
           <h3>物理海洋学</h3>
-          <p>研究波浪理论、海洋动力学、温盐环流及船舶阻尼矩阵模拟。</p>
+          <p>波浪理论、海洋动力学、温盐环流及阻尼矩阵模拟分析。</p>
         </div>
       </a>
-
       <a href="docs/#/biochem" class="card-link">
         <div class="grid-card">
-          <div class="icon">🧪</div>
+          <span class="status-tag">Data Updated</span>
+          <span class="icon">🧪</span>
           <h3>生化与环境</h3>
-          <p>追踪全球碳循环、海洋酸化机制及深海生物地球化学过程。</p>
+          <p>全球碳循环、海洋酸化、营养盐分布与生物泵机制研究。</p>
         </div>
       </a>
-
       <a href="docs/#/geology" class="card-link">
         <div class="grid-card">
-          <div class="icon">🌋</div>
+          <span class="status-tag">Plate Map</span>
+          <span class="icon">🌋</span>
           <h3>地球与构造</h3>
-          <p>分析板块运动、大洋中脊演化、海底地貌与深海沉积物。</p>
-        </div>
-      </a>
-
-      <a href="docs/#/data-resources" class="card-link">
-        <div class="grid-card">
-          <div class="icon">📊</div>
-          <h3>数据资源中心</h3>
-          <p>全球权威海洋观测数据门户集成，包括 NOAA、Argo 与卫星遥感资料。</p>
+          <p>板块运动、大洋中脊、海底地貌与古海洋气候重建。</p>
         </div>
       </a>
     </div>
 
-    <div class="cover-footer">
-      <span>© 2026 Ocean Lab</span> | 
-      <a href="https://github.com/">GitHub</a> | 
-      <a href="docs/#/README">文档首页</a>
-    </div>
+    <div class="cover-footer">© 2026 Ocean Science Digital Lab | Powered by Docsify & Gemini AI</div>
   </div>
 </body>
 </html>
