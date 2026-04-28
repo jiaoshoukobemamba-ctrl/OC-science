@@ -2,42 +2,49 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>文档库 | 海洋科学实验室</title>
+  <title>交互实验室 | OSDL</title>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-  <style>
-    :root { --theme-color: #00d4ff; }
-    /* 优化公式显示 */
-    .katex-display { overflow-x: auto; overflow-y: hidden; }
-  </style>
 </head>
 <body>
-  <div id="app">正在进入实验室...</div>
+  <div id="app">正在初始化实验室设备...</div>
   <script>
     window.$docsify = {
-      name: 'OSDL Docs',
-      repo: '',
-      loadSidebar: true,
-      subMaxLevel: 3,
+      name: 'OSDL 交互端',
       basePath: './',
-      // 数学公式插件
-      katex: {
-        delimiters: [
-          {left: '$$', right: '$$', display: true},
-          {left: '$', right: '$', display: false}
-        ]
-      },
-      // 搜索插件
-      search: 'auto',
-      // 字数统计
-      count: { language: 'chinese' }
+      loadSidebar: true,
+      subMaxLevel: 2,
+      tabs: { persist: true, sync: true, theme: 'classic', tabBadge: true, tabComments: true }
     }
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  <script src="//unpkg.com/docsify-mermaid@latest/dist/docsify-mermaid.js"></script>
-  <script>mermaid.initialize({ startOnLoad: true });</script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    // 仿真脚本：监听 URL 变化并初始化波浪模拟器
+    function initWaveSim() {
+      const ctx = document.getElementById('waveChart');
+      if (!ctx) return;
+      let t = 0;
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: Array.from({length: 100}, (_, i) => i),
+          datasets: [{ label: '实时波浪曲线', data: [], borderColor: '#00d4ff', pointRadius: 0, fill: false }]
+        },
+        options: { scales: { y: { min: -10, max: 10 }, x: { display: false } }, animation: false }
+      });
+      function update() {
+        const A = document.getElementById('amplitude')?.value || 5;
+        const f = document.getElementById('frequency')?.value || 1;
+        chart.data.datasets[0].data = chart.data.labels.map(x => A * Math.sin(2 * Math.PI * f * (x/100) + t));
+        chart.update(); t += 0.1; requestAnimationFrame(update);
+      }
+      update();
+    }
+    // Docsify 渲染后的回调
+    window.addEventListener('hashchange', () => setTimeout(initWaveSim, 500));
+    window.onload = () => setTimeout(initWaveSim, 500);
+  </script>
 </body>
 </html>
