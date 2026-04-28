@@ -2,25 +2,93 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>海洋科学学习笔记</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <title>海洋科学数字实验室 | Ocean Science Lab</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="个人海洋科学学习与研究记录">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"/>
+
+  <style>
+    /* 自定义样式：让界面更有科技感 */
+    :root {
+      --theme-color: #0077be; /* 海洋蓝 */
+      --base-font-size: 16px;
+    }
+    nav.app-nav {
+      margin-right: 20px;
+    }
+    /* 侧边栏样式微调 */
+    .sidebar-nav strong {
+      color: #00d4ff;
+      font-size: 1.1em;
+    }
+  </style>
 </head>
 <body>
-  <div id="app">加载中...</div>
+  <div id="app">加载中，正在潜入深海...</div>
+  
   <script>
     window.$docsify = {
-      name: '海洋科学学习',
-      repo: '', // 填入你的GitHub仓库链接
-      loadSidebar: true, // 开启侧边栏
-      subMaxLevel: 2,    // 侧边栏显示目录层级
-      coverpage: true,   // 开启封面
-      search: 'auto',    // 开启搜索
+      // 1. 基本信息配置
+      name: '🌊 海洋科学实验室',
+      repo: '', // 建议填入你的 GitHub 仓库地址
+      
+      // 2. 加载配置
+      loadSidebar: true,   // 开启侧边栏 (需 _sidebar.md)
+      loadNavbar: false,    // 如果需要顶部导航栏可开启
+      coverpage: true,     // 开启封面 (需 _coverpage.md)
+      onlyCover: false,    // 封面和内容单独显示
+      
+      // 3. 交互功能
+      subMaxLevel: 3,      // 侧边栏自动提取标题层级
+      auto2top: true,      // 切换页面后自动回到顶部
+      
+      // 4. 插件配置：全文搜索
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: '搜索知识点...',
+        noData: '未找到相关结果',
+        depth: 6
+      },
+
+      // 5. 插件配置：字数统计
+      count: {
+        countable: true,
+        fontsize: '0.9em',
+        color: 'rgb(150,150,150)',
+        language: 'chinese'
+      },
+
+      // 6. 插件配置：选项卡 (Tabs)
+      tabs: {
+        persist: true,      // 刷新页面是否保持选项卡状态
+        sync: true,         // 多个标签页是否同步切换
+        theme: 'classic',   // 风格
+        tabComments: true,  // 允许在注释中写标签名
+        tabHeadings: true   // 允许将标题转化为标签
+      }
     }
   </script>
+
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+
   <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"/>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+
+  <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+
 </body>
 </html>
