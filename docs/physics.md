@@ -1,30 +1,35 @@
-# 🌀 物理海洋：动力学交互实验室
+# 🌀 物理海洋学系统
 
-> **实验室指引**：在左侧调节参数，实时观察物理环境对海浪形态的影响。
+物理海洋学研究海水的运动规律及其物理性质。
 
-#### [physics-tabs:start]
+## 1. 波浪理论 (Wave Dynamics)
+波浪是能量穿越介质的体现。
 
-##### **🌊 实时波浪仿真**
-通过调整**振幅**和**频率**，观察水质点的运动包络线。
-
-<div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid #00d4ff;">
-  <canvas id="waveChart" width="400" height="180"></canvas>
-  <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center; font-size: 0.9em;">
-    <label>振幅 (Amplitude): <input type="range" id="amplitude" min="1" max="10" value="5"></label>
-    <label>频率 (Frequency): <input type="range" id="frequency" min="0.1" max="2" step="0.1" value="1"></label>
+<div class="sim-container">
+  <h4>实时波浪交互模拟</h4>
+  <canvas id="waveChart" width="400" height="150"></canvas>
+  <div style="display:flex; gap:15px; font-size:0.8em;">
+    <label>波高: <input type="range" id="amp" min="1" max="10" value="5"></label>
+    <label>周期: <input type="range" id="freq" min="0.5" max="3" step="0.1" value="1"></label>
   </div>
 </div>
 
-**原理提示**：
-- **振幅 ($A$)**：决定波浪的能量。
-- **频率 ($f$)**：决定单位时间内波峰通过的数量。
-
-##### **🌍 环流探索**
-- [**风驱洋流**：表层系统的动力源](#/physics?id=wind-driven)
-- [**温盐环流**：深海的热量输送带](#/physics?id=thermohaline)
-
-#### [physics-tabs:end]
+### 核心知识点
+- **艾里波 (Airy Wave)**：描述微幅波的基础方程。
+- **波速公式**：$c = \sqrt{\frac{gL}{2\pi} \tanh(\frac{2\pi d}{L})}$
 
 ---
-### 🔗 实验室导航
-| [🧪 前往生化中心](#/biochem) | [🌋 前往地质考察](#/geology) | [🏠 返回主门户](/) |
+
+## 2. 温盐环流 (Thermohaline Circulation)
+由密度梯度驱动的全球“输送带”。当海水结冰时，排出的盐分增加了剩余海水的密度，导致其下沉。
+
+> [!TIP]
+> **深入探索**：[点击了解北大西洋深层水的形成](physics-deep-water.md)
+
+---
+
+## 3. 海洋力学基础
+- **科氏力 (Coriolis Force)**：由于地球自转产生的偏向力。
+- **埃克曼抽吸 (Ekman Suction)**：风应力导致的海水垂直运动。
+
+| [🧪 访问生化中心](biochem.md) | [🌋 访问地质中心](geology.md) | [🏠 返回主页](/) |
