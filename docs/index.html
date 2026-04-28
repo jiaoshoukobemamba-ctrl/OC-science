@@ -2,160 +2,140 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>海洋科学交互实验室 | OSDL</title>
+  <title>核心实验室 | OSDL</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
-  
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"/>
 
   <style>
-    :root { --theme-color: #00d4ff; }
+    :root {
+      --theme-color: #00d4ff;
+      --sidebar-background: #041421;
+      --content-max-width: 900px;
+    }
+
+    /* 侧边栏视觉美化 */
+    .sidebar { border-right: 1px solid rgba(255,255,255,0.05); }
     
-    /* 侧边栏样式定制，确保可见 */
-    .sidebar { background-color: #041421 !important; border-right: 1px solid rgba(255,255,255,0.05); }
-    
-    /* 物理模拟器交互样式 */
-    .sim-controls { display: flex; gap: 15px; margin-top: 10px; justify-content: center; align-items: center; font-size: 0.85em;}
-    .sim-btn { background: #00d4ff; color: #000; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .sim-btn.stop { background: #ff4d4d; }
-    canvas { background: rgba(0,0,0,0.3); border-radius: 8px; cursor: crosshair; }
-    
-    /* 修复公式显示：防止 KaTeX 公式过长撑破布局 */
-    .katex-display { overflow-x: auto; overflow-y: hidden; padding: 10px 0; }
+    /* 物理模拟器组件样式 */
+    .sim-container {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      margin: 20px 0;
+    }
+    .sim-controls { display: flex; gap: 15px; margin-top: 15px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .sim-btn { 
+      background: #00d4ff; color: #000; border: none; padding: 6px 16px; 
+      border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; 
+    }
+    .sim-btn:hover { background: #fff; box-shadow: 0 0 15px #00d4ff; }
+    .sim-btn.stop { background: #ff4d4d; color: #fff; }
+    canvas { background: rgba(0,0,0,0.3); border-radius: 10px; cursor: crosshair; }
+
+    /* 丰富网页感的提示框样式 */
+    .alert { padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 5px solid #00d4ff; background: rgba(0,212,255,0.05); }
   </style>
 </head>
 <body>
-  <div id="app">正在载入海洋数据系统...</div>
+  <div id="app">正在接入实验室数据...</div>
   
   <script>
     window.$docsify = {
       name: 'OSDL Lab',
-      basePath: './',      // 2. 侧边栏修复：确保在当前目录下找 .md 文件
-      loadSidebar: true,   // 3. 侧边栏修复：开启侧边栏
-      subMaxLevel: 3,      // 3. 侧边栏修复：自动提取 .md 中的标题到侧边栏
+      basePath: './',      // 确保读取 docs 目录下的文件
+      loadSidebar: true,   // 开启左侧导航
+      subMaxLevel: 3,      // 自动提取 md 里的标题
+      auto2top: true,      // 切换页面自动回到顶部
+      // 这里的封面设为 false，因为封面由根目录 index.html 承担
+      coverpage: false, 
       
-      // 4. 公式修复：KaTeX 配置
-      katex: {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false } // 支持 $CO_2$ 行内格式
-        ]
-      },
-      // 插件配置：Flexible Alerts (用于图二中的 [!WARNING] 样式)
+      // 插件配置：警告框
       'flexible-alerts': { style: 'flat' }
     }
   </script>
 
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  
-  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
-  
   <script src="//cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts"></script>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
+
   <script>
     let waveChartInstance = null;
     let animationId = null;
     let time = 0;
-    let isRunning = true; // 初始状态为运行
+    let isRunning = true;
 
-    function initInteractiveWave() {
-      const ctx = document.getElementById('waveChart');
-      if (!ctx) return;
+    function initWaveSim() {
+      const canvas = document.getElementById('waveChart');
+      if (!canvas) return;
 
-      // 如果已存在实例，先销毁，防止内存泄漏和渲染错误
       if (waveChartInstance) {
         cancelAnimationFrame(animationId);
         waveChartInstance.destroy();
       }
 
-      // 获取数据：降低波速的关键在 time 的增量 (update函数中)
-      const chartData = {
-        labels: Array.from({length: 100}, (_, i) => (i / 10).toFixed(1)), // X轴代表距离
-        datasets: [{
-          label: '海面高度 (m)',
-          data: [],
-          borderColor: '#00d4ff',
-          backgroundColor: 'rgba(0, 212, 255, 0.1)',
-          pointRadius: 0, // 初始不显示点，光标悬停时显示
-          pointHoverRadius: 5,
-          fill: true,
-          borderWidth: 2,
-          tension: 0.4 // 让曲线更平滑
-        }]
-      };
-
+      const ctx = canvas.getContext('2d');
       waveChartInstance = new Chart(ctx, {
         type: 'line',
-        data: chartData,
+        data: {
+          labels: Array.from({length: 100}, (_, i) => (i / 10).toFixed(1)),
+          datasets: [{
+            label: '高度 (m)',
+            data: [],
+            borderColor: '#00d4ff',
+            backgroundColor: 'rgba(0, 212, 255, 0.1)',
+            fill: true,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            borderWidth: 2,
+            tension: 0.4
+          }]
+        },
         options: {
           responsive: true,
-          animation: false, // 关闭自带动画，使用 requestAnimationFrame 手动控制
-          interaction: {
-            mode: 'index', // 光标查看数据：按索引（X轴）触发
-            intersect: false, // 光标不需要精准接触曲线
-          },
-          plugins: {
-            legend: { display: false },
-            // 光标查看数据：工具提示配置
-            tooltip: {
-              enabled: true,
-              callbacks: {
-                title: (items) => `位置: ${items[0].label} m`,
-                label: (item) => `高度: ${item.formattedValue} m`
-              }
-            }
-          },
+          animation: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false } },
           scales: {
-            x: { title: { display: true, text: '距离 (m)', color: '#fff' }, grid: { display: false } },
-            y: { title: { display: true, text: '高度 (m)', color: '#fff' }, min: -10, max: 10 }
+            x: { grid: { display: false } },
+            y: { min: -10, max: 10 }
           }
         }
       });
 
-      // 按钮交互逻辑
       const toggleBtn = document.getElementById('toggleBtn');
       if (toggleBtn) {
-        toggleBtn.addEventListener('click', function() {
+        toggleBtn.onclick = () => {
           isRunning = !isRunning;
-          if (isRunning) {
-            this.textContent = '停止模拟';
-            this.classList.remove('stop');
-            animate(); // 重新开始
-          } else {
-            this.textContent = '开始模拟';
-            this.classList.add('stop');
-            cancelAnimationFrame(animationId); // 停止
-          }
-        });
+          toggleBtn.textContent = isRunning ? '停止模拟' : '开始模拟';
+          toggleBtn.classList.toggle('stop', !isRunning);
+          if (isRunning) animate();
+        };
       }
 
       function animate() {
         if (!document.getElementById('waveChart') || !isRunning) return;
-        
         const A = document.getElementById('amp')?.value || 5;
         const T = document.getElementById('period')?.value || 2;
         
-        // 降低波速的关键：减小 time 的增量 (例如从 0.1 减为 0.02)
+        // 降低波速的关键增量
         time += (0.02 / T); 
 
         waveChartInstance.data.datasets[0].data = waveChartInstance.data.labels.map((x, i) => 
           A * Math.sin(2 * Math.PI * (i/100) - time)
         );
-        waveChartInstance.update('none'); // 'none' 关掉 Chart.js 内部更新动画，提高性能
-        
+        waveChartInstance.update('none');
         animationId = requestAnimationFrame(animate);
       }
-
-      animate(); // 启动
+      animate();
     }
 
-    // Docsify 路由切换时重新加载模拟器
-    window.addEventListener('hashchange', () => setTimeout(initInteractiveWave, 500));
-    window.onload = () => setTimeout(initInteractiveWave, 500);
+    // 处理 Docsify 路由切换时的脚本重新加载
+    window.addEventListener('hashchange', () => setTimeout(initWaveSim, 500));
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initWaveSim, 500));
   </script>
 </body>
 </html>
