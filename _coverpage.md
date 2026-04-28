@@ -1,4 +1,4 @@
-![logo](https://img.icons8.com/external-flaticons-lineal-color-flat-icons/128/external-ocean-biotechnology-flaticons-lineal-color-flat-icons.png)
+<img src="https://img.icons8.com/fluency/128/ocean.png" width="120" style="margin-top: 50px;">
 
 # 海洋科学数字实验室 <small>Ocean Science Lab</small>
 
@@ -13,39 +13,49 @@
 [数据门户](#/docs/data-resources)
 [GitHub](https://github.com/)
 
+
 <style>
-  /* 强制封面全屏背景 */
+  /* 强制覆盖 Docsify 默认的白色背景 */
   section.cover {
     background: linear-gradient(to bottom, #041421 0%, #004e92 100%) !important;
-    display: flex !important;
   }
   
-  /* 修复文字颜色 */
-  section.cover.show h1, 
-  section.cover blockquote, 
-  section.cover table {
+  /* 确保文字在深色背景下是白色的 */
+  section.cover .cover-main {
     color: #ffffff !important;
   }
+  section.cover h1, 
+  section.cover blockquote, 
+  section.cover table,
+  section.cover table td {
+    color: #ffffff !important;
+    border-color: rgba(255,255,255,0.2) !important;
+  }
 
-  /* 修复按钮样式 */
+  /* 按钮美化 */
   section.cover .cover-main > p a {
     border-radius: 25px !important;
     padding: 0.8em 2em !important;
     margin: 0.5em !important;
     transition: 0.3s !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    text-decoration: none !important;
   }
 
-  /* 首页按钮突出显示 */
+  /* 主按钮（蓝色） */
   section.cover .cover-main > p a[href="#README"] {
     background-color: #00d4ff !important;
     color: #041421 !important;
     border: none !important;
   }
 
-  /* 悬停动画 */
+  /* 次要按钮（透明白框） */
+  section.cover .cover-main > p a:not([href="#README"]) {
+    color: #fff !important;
+    border: 1px solid #fff !important;
+  }
+
   section.cover .cover-main > p a:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,212,255,0.4);
+    box-shadow: 0 5px 15px rgba(0,212,255,0.4);
   }
 </style>
