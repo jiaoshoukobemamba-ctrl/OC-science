@@ -40,3 +40,9 @@
 ### 在线计算器
 * **SeaWater Equation of State**：在线计算海水密度、声速。
 * **Tide Predictor**：全球主要港口的潮汐预报查询。
+## 🌍 实时全球海洋观测窗
+你可以直接在下方操作实时海流图：
+
+<iframe src="https://earth.nullschool.net/#current/ocean/surface/currents/orthographic=-183.18,19.46,451" width="100%" height="500px" style="border-radius: 15px; border: none;"></iframe>
+
+> **操作提示**：点击“earth”文字可以切换查看：海表温度 (SST)、海浪高度、化学浓度。
