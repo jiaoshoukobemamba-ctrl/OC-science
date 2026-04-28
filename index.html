@@ -2,85 +2,150 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>海洋科学数字实验室 | Ocean Science Digital Lab</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
-  <style>
-    body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Roboto', sans-serif; background: #000c19; color: white; overflow: hidden; }
-    /* 背景动画 */
-    .bg-container { position: fixed; top: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #02203c 0%, #000c19 100%); z-index: 1; }
-    .wave { position: absolute; bottom: 0; width: 200%; height: 100px; background: url('https://s1.ax1x.com/2022/06/08/XfM9m9.png'); background-size: 50% 100px; opacity: 0.1; animation: wave-move 20s linear infinite; }
-    @keyframes wave-move { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    
-    /* 内容容器 */
-    .cover-container { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; z-index: 10; text-align: center; }
-    .header h1 { font-size: 3.5em; color: #00d4ff; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
-    
-    /* 响应式网格布局 */
-    .grid { 
-      display: grid; 
-      grid-template-columns: repeat(2, 1fr); /* 2x2 布局 */
-      gap: 20px; 
-      width: 90%; 
-      max-width: 900px; 
-      margin-top: 40px; 
-    }
-    
-    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } } /* 手机端单列 */
+  <title>海洋科学数字实验室 | OSDL</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
 
-    .card { 
-      background: rgba(255,255,255,0.05); 
-      border: 1px solid rgba(255,255,255,0.1); 
-      border-radius: 15px; 
-      padding: 25px; 
-      transition: all 0.3s ease; 
-      text-decoration: none; 
-      color: white; 
-      display: block;
+  <style>
+    :root {
+      --theme-color: #00d4ff;
+      --cover-background-color: #000c19;
+      --sidebar-background: #041421;
     }
-    .card:hover { 
-      transform: translateY(-8px); 
-      border-color: #00d4ff; 
-      background: rgba(0, 212, 255, 0.08); 
-      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+
+    /* 侧边栏视觉优化 */
+    .sidebar {
+      border-right: 1px solid rgba(255,255,255,0.05);
+      font-size: 15px;
     }
-    .card h3 { color: #00d4ff; margin-top: 0; font-size: 1.5em; }
-    .card p { font-size: 0.9em; opacity: 0.8; line-height: 1.5; }
+
+    /* 封面全屏背景网格效果 */
+    section.cover {
+      background: radial-gradient(circle at center, #02203c 0%, #000c19 100%) !important;
+    }
     
-    .footer { position: absolute; bottom: 20px; font-size: 0.8em; opacity: 0.5; }
+    section.cover::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* 物理模拟器在页面内的样式 */
+    .sim-controls { display: flex; gap: 15px; margin-top: 15px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .sim-btn { background: #00d4ff; color: #000; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .sim-btn:hover { background: #fff; box-shadow: 0 0 15px #00d4ff; }
+    .sim-btn.stop { background: #ff4d4d; color: #fff; }
+    canvas { background: rgba(0,0,0,0.4); border-radius: 12px; cursor: crosshair; border: 1px solid rgba(0, 212, 255, 0.2); }
   </style>
 </head>
 <body>
-  <div class="bg-container"><div class="wave"></div></div>
-  <div class="cover-container">
-    <div class="header">
-      <h1>海洋科学数字实验室</h1>
-      <p>Interactive Exploration of Oceanography & Geoscience</p>
-    </div>
-    
-    <div class="grid">
-      <a href="docs/#/physics" class="card">
-        <h3>🌀 物理海洋</h3>
-        <p>探索波浪动力学，实时运行规则波与不规则波交互仿真器。</p>
-      </a>
-      
-      <a href="docs/#/biochem-chem" class="card">
-        <h3>🧪 海洋生化</h3>
-        <p>解析海洋碳循环泵、化学平衡及海洋生命多样性体系。</p>
-      </a>
-      
-      <a href="docs/#/geology" class="card">
-        <h3>🌋 海洋地质</h3>
-        <p>直观呈现板块构造演化、海底扩张与海沟俯冲的动态过程。</p>
-      </a>
-      
-      <a href="docs/#/data-resources" class="card" style="border-style: dashed; border-color: rgba(0, 212, 255, 0.5);">
-        <h3>📊 数据资源</h3>
-        <p>获取全球实时观测数据、海流图及海洋科学常用编程工具。</p>
-      </a>
-    </div>
+  <div id="app">正在初始化深海系统...</div>
+  
+  <script>
+    window.$docsify = {
+      name: 'OSDL Lab',
+      repo: '',
+      loadSidebar: true,    // 开启侧边栏
+      coverpage: true,      // 开启封面功能 (需配合 _coverpage.md)
+      onlyCover: false,     // 设为 false，允许向下滚动进入文档
+      subMaxLevel: 3,       // 自动提取标题到侧边栏
+      basePath: './',       // 确保相对路径正确
 
-    <div class="footer">© 2026 OSDL · Digital Research Platform</div>
-  </div>
+      // 插件配置：自动跳转到顶部
+      auto2top: true,
+      
+      // 插件配置：警告框样式
+      'flexible-alerts': { style: 'flat' }
+    }
+  </script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    let waveChartInstance = null;
+    let animationId = null;
+    let time = 0;
+    let isRunning = true;
+
+    function initWaveSim() {
+      const canvas = document.getElementById('waveChart');
+      if (!canvas) return;
+
+      if (waveChartInstance) {
+        cancelAnimationFrame(animationId);
+        waveChartInstance.destroy();
+      }
+
+      const ctx = canvas.getContext('2d');
+      waveChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: Array.from({length: 100}, (_, i) => (i / 10).toFixed(1)),
+          datasets: [{
+            label: '海面高度 (m)',
+            data: [],
+            borderColor: '#00d4ff',
+            backgroundColor: 'rgba(0, 212, 255, 0.15)',
+            fill: true,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            borderWidth: 3,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          animation: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, title: { display: true, text: '距离 (m)', color: '#888' } },
+            y: { min: -10, max: 10, title: { display: true, text: '振幅', color: '#888' } }
+          }
+        }
+      });
+
+      const toggleBtn = document.getElementById('toggleBtn');
+      if (toggleBtn) {
+        toggleBtn.onclick = () => {
+          isRunning = !isRunning;
+          toggleBtn.textContent = isRunning ? '停止模拟' : '开始模拟';
+          toggleBtn.classList.toggle('stop', isRunning === false);
+          if (isRunning) animate();
+        };
+      }
+
+      function animate() {
+        if (!document.getElementById('waveChart') || !isRunning) return;
+        const A = document.getElementById('amp')?.value || 5;
+        const T = document.getElementById('period')?.value || 2;
+        
+        // 降低波速：使用较小的增量
+        time += (0.025 / T); 
+
+        waveChartInstance.data.datasets[0].data = waveChartInstance.data.labels.map((x, i) => 
+          A * Math.sin(2 * Math.PI * (i/100) - time)
+        );
+        waveChartInstance.update('none');
+        animationId = requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    // 监听路由变化，确保切换页面后重新初始化模拟器
+    window.addEventListener('hashchange', () => setTimeout(initWaveSim, 500));
+    // 首次加载
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initWaveSim, 500));
+  </script>
 </body>
 </html>
